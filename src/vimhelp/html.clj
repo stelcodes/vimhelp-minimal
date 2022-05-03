@@ -58,7 +58,7 @@
 
 (defmethod render :example
   [[_ example] _]
-  [:pre.example [:code example]])
+  [:code.example [:pre example]])
 
 (defmethod render :url
   [[_ url] _]
