@@ -9,12 +9,10 @@
   org.clojure/tools.cli {:mvn/version "1.0.194"}}
 
  :aliases
- {:dev
-  {:extra-paths ["test"]
-   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0-612"}}}
-
-  :test
-  {:main-opts ["-m" "kaocha.runner"]}
+ {:test
+  {:extra-paths ["test" "test-resources"]
+   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0-612"}}
+   :main-opts ["-m" "kaocha.runner"]}
 
   :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "RELEASE"}}
             :main-opts ["-m" "hf.depstar.uberjar" "target/vimhelp.jar"
