@@ -72,7 +72,7 @@
 (defmethod render :section-header
   [[_ title tag] opts]
   (let [[_ tag-name] tag]
-    [:p.section-header
+    [:span.section-header
      [:a.section-link {:href (str "#" (url-encode tag-name))} "@"]
      (into [:span.section-title] (replace-spaces title))
      (render tag opts)]))
