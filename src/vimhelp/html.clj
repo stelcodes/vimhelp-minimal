@@ -22,56 +22,56 @@
                      hiccup/raw)
                 (apply str char-seq))))))
 
-(defmulti render* (fn [line _] (first line)))
-(defmethod render* :default [x _] x)
+(defmulti render (fn [line _] (first line)))
+(defmethod render :default [x _] x)
 
-(defmethod render* :text
+(defmethod render :text
   [[_ & elements] opts]
   (->> (if (= [""] elements) [" "] elements)
        (map #(if (vector? %)
-               (render* % opts)
+               (render % opts)
                (replace-spaces %)))
        (cons :p)
        vec))
 
-(defmethod render* :tag
+(defmethod render :tag
   [[_ tag-name] _]
   [:a.tag {:name (url-encode tag-name)} tag-name])
 
-(defmethod render* :ref
+(defmethod render :ref
   [[_ ref-name] {:keys [tags]}]
   [:a.ref {:class (when-not (contains? tags ref-name) "missing-tag")
            :href (str (get tags ref-name) "#" (url-encode ref-name))}
    ref-name])
 
-(defmethod render* :constant
+(defmethod render :constant
   [[_ constant-name] _]
   [:span.constant constant-name])
 
-(defmethod render* :header
+(defmethod render :header
   [[_ header-text] _]
   [:span.header header-text])
 
-(defmethod render* :command
+(defmethod render :command
   [[_ command] _]
   [:code.command command])
 
-(defmethod render* :example
+(defmethod render :example
   [[_ example] _]
   [:pre.example [:code example]])
 
-(defmethod render* :url
+(defmethod render :url
   [[_ url] _]
   [:a.url {:href url} url])
 
-(defmethod render* :divider
+(defmethod render :divider
   [[_ text] _]
   [:span.divider text])
 
-(defmethod render* :section-header
+(defmethod render :section-header
   [[_ title tag] opts]
   (let [[_ tag-name] tag]
     [:p.section-header
      [:a.section-link {:href (str "#" (url-encode tag-name))} "@"]
      (into [:span.section-title] (replace-spaces title))
-     (render* tag opts)]))
+     (render tag opts)]))
