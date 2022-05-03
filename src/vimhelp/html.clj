@@ -27,12 +27,13 @@
 
 (defmethod render :text
   [[_ & elements] opts]
-  (->> (if (= [""] elements) [" "] elements)
-       (map #(if (vector? %)
-               (render % opts)
-               (replace-spaces %)))
-       (cons :p)
-       vec))
+  (let [inner-els (->> elements
+                       (remove #(or (= "" %) (= " " %)))
+                       (map #(if (vector? %)
+                               (render % opts)
+                               (replace-spaces %))))]
+    (when-not (zero? (count inner-els))
+      (into [:p] inner-els))))
 
 (defmethod render :tag
   [[_ tag-name] _]
