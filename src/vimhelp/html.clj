@@ -51,7 +51,7 @@
 
 (defmethod render :header
   [[_ header-text] _]
-  [:span.header header-text])
+  [:span.header (replace-spaces header-text)])
 
 (defmethod render :command
   [[_ command] _]
