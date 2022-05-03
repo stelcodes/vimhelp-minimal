@@ -37,7 +37,7 @@
 
 (defmethod render :tag
   [[_ tag-name] _]
-  [:a.tag {:name (url-encode tag-name)} tag-name])
+  [:a.tag {:name (url-encode tag-name) :href (str "#" (url-encode tag-name))} tag-name])
 
 (defmethod render :ref
   [[_ ref-name] {:keys [tags]}]
@@ -71,8 +71,6 @@
 
 (defmethod render :section-header
   [[_ title tag] opts]
-  (let [[_ tag-name] tag]
-    [:span.section-header
-     [:a.section-link {:href (str "#" (url-encode tag-name))} "@"]
-     (into [:span.section-title] (replace-spaces title))
-     (render tag opts)]))
+  [:span.section-header
+   (into [:span.section-title] (replace-spaces title))
+   (render tag opts)])
