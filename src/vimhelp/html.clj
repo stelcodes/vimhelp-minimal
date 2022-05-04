@@ -28,13 +28,13 @@
 
 (defmethod render :text
   [[_ & elements] bad-refs]
-  (let [rendered-els (map #(cond
-                            (vector? %) (render % bad-refs)
-                            (= "" (str/trim %)) [:br]
-                            :else (replace-spaces %))
-                          elements)]
-    (when-not (zero? (count rendered-els))
-      (into [:p] rendered-els))))
+  (if (every? #(and (string? %) (= "" (str/trim %))) elements)
+    [:br]
+    (->> elements
+         (map #(cond
+                (vector? %) (render % bad-refs)
+                :else (replace-spaces %)))
+         (into [:p]))))
 
 (defmethod render :tag
   [[_ tag-name] _]
