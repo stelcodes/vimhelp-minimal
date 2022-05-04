@@ -10,10 +10,8 @@
     (p/parse r)))
 
 (defn help-file->hiccup [path bad-refs]
-  (with-open [r (io/reader path)]
-    (->> r
-         p/parse
-         (map #(h/render % bad-refs)))))
+  (->> (help-file->ir path)
+       (map #(h/render % bad-refs))))
 
 (defn help-file->html [path bad-refs]
   (->> (help-file->hiccup path bad-refs)
