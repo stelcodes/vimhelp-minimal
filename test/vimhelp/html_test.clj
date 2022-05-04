@@ -18,14 +18,13 @@
 
 (t/deftest render-ref-test
   (t/are [in out] (= out (sut/render [:ref in] {}))
-    "foo",   [:a.ref {:class "missing-tag" :href "#foo"} "foo"]
-    "<foo>", [:a.ref {:class "missing-tag" :href "#%3Cfoo%3E"} "<foo>"])
+    "foo",   [:a.ref {:href "#foo"} "foo"]
+    "<foo>", [:a.ref {:href "#%3Cfoo%3E"} "<foo>"])
 
-  (let [tags {"foo" "index.html"
-              "<foo>" "bar.html"}]
-    (t/are [in out] (= out (sut/render [:ref in] {:tags tags}))
-      "foo",   [:a.ref {:class nil :href "index.html#foo"} "foo"]
-      "<foo>", [:a.ref {:class nil :href "bar.html#%3Cfoo%3E"} "<foo>"])))
+  (let [bad-refs #{"foo" "<foo>"}]
+    (t/are [in out] (= out (sut/render [:ref in] bad-refs))
+      "foo",   "foo"
+      "<foo>", "<foo>")))
 
 
 (t/deftest render-section-header-test

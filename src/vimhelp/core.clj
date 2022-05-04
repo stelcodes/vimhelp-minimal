@@ -9,14 +9,13 @@
   (with-open [r (io/reader path)]
     (p/parse r)))
 
-(defn help-file->hiccup [path]
+(defn help-file->hiccup [path bad-refs]
   (with-open [r (io/reader path)]
     (->> r
          p/parse
-         (map #(h/render % {})))))
+         (map #(h/render % bad-refs)))))
 
-(defn help-file->html [path]
-  (->> path
-       help-file->hiccup
+(defn help-file->html [path bad-refs]
+  (->> (help-file->hiccup path bad-refs)
        hiccup/html
        (str "<DOCTYPE html>")))

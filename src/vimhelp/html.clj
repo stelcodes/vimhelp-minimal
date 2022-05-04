@@ -27,9 +27,9 @@
 (defmethod render :default [x _] x)
 
 (defmethod render :text
-  [[_ & elements] opts]
+  [[_ & elements] bad-refs]
   (let [rendered-els (map #(cond
-                            (vector? %) (render % opts)
+                            (vector? %) (render % bad-refs)
                             (= "" (str/trim %)) [:br]
                             :else (replace-spaces %))
                           elements)]
@@ -41,10 +41,10 @@
   [:a.tag {:name (url-encode tag-name) :href (str "#" (url-encode tag-name))} tag-name])
 
 (defmethod render :ref
-  [[_ ref-name] {:keys [tags]}]
-  [:a.ref {:class (when-not (contains? tags ref-name) "missing-tag")
-           :href (str (get tags ref-name) "#" (url-encode ref-name))}
-   ref-name])
+  [[_ ref-name] bad-refs]
+  (if (contains? bad-refs ref-name)
+    ref-name
+    [:a.ref {:href (str "#" (url-encode ref-name))} ref-name]))
 
 (defmethod render :constant
   [[_ constant-name] _]
@@ -71,7 +71,7 @@
   [:span.divider text])
 
 (defmethod render :section-header
-  [[_ title tag] opts]
+  [[_ title tag] bad-refs]
   [:span.section-header
    (into [:span.section-title] (replace-spaces title))
-   (render tag opts)])
+   (render tag bad-refs)])
