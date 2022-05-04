@@ -1,27 +1,9 @@
-{
- :paths ["src" "resources"]
-
+{:paths ["src" "resources"]
  :deps
- {;; for GraalVM
-  ;; https://dev.clojure.org/jira/browse/CLJ-1472
-  org.clojure/clojure {:mvn/version "1.10.1"}
-  hiccup/hiccup {:mvn/version "2.0.0-alpha2"}
-  org.clojure/tools.cli {:mvn/version "1.0.194"}}
-
+ {org.clojure/clojure {:mvn/version "1.11.1"}
+  hiccup/hiccup {:mvn/version "2.0.0-alpha2"}}
  :aliases
  {:test
   {:extra-paths ["test" "test-resources"]
    :extra-deps {lambdaisland/kaocha {:mvn/version "1.0-612"}}
-   :main-opts ["-m" "kaocha.runner"]}
-
-  :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "RELEASE"}}
-            :main-opts ["-m" "hf.depstar.uberjar" "target/vimhelp.jar"
-                        "-C" "-m" "vimhelp.core"]}
-
-  :ancient
-  {:extra-deps {olical/depot {:mvn/version "RELEASE"}}
-   :main-opts ["-m" "depot.outdated.main"]}
-  }
-
- :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
- }
+   :main-opts ["-m" "kaocha.runner"]}}}
