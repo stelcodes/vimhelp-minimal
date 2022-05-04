@@ -5,6 +5,10 @@
    [vimhelp.html :as h]
    [vimhelp.parser :as p]))
 
+(defn help-file->ir [path]
+  (with-open [r (io/reader path)]
+    (p/parse r)))
+
 (defn help-file->hiccup [path]
   (with-open [r (io/reader path)]
     (->> r
