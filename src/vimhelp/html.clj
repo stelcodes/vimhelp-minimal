@@ -1,5 +1,6 @@
 (ns vimhelp.html
   (:require
+   [clojure.string :as str]
    [hiccup2.core :as hiccup])
   (:import
    java.net.URLEncoder))
@@ -27,13 +28,13 @@
 
 (defmethod render :text
   [[_ & elements] opts]
-  (let [inner-els (->> elements
-                       (remove #(or (= "" %) (= " " %)))
-                       (map #(if (vector? %)
-                               (render % opts)
-                               (replace-spaces %))))]
-    (when-not (zero? (count inner-els))
-      (into [:p] inner-els))))
+  (let [rendered-els (map #(cond
+                            (vector? %) (render % opts)
+                            (= "" (str/trim %)) [:br]
+                            :else (replace-spaces %))
+                          elements)]
+    (when-not (zero? (count rendered-els))
+      (into [:p] rendered-els))))
 
 (defmethod render :tag
   [[_ tag-name] _]
